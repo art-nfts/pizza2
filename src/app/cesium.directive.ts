@@ -10,6 +10,8 @@ export class CesiumDirective implements OnInit {
 
   async ngOnInit() {
     //const viewer = new Cesium.Viewer(this.el.nativeElement);
+    Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzNTUzMzg1MS05YzYyLTRiZDAtYmJkMS1iOWFmNTU5YjllZTUiLCJpZCI6NTc0NTcsImlhdCI6MTYyMjM2ODIzNX0.oOvyENDh9CrhPGF0596pdXwlAMSA8n5F5JUlO0mYc54";
+
     const viewer = new Cesium.Viewer(this.el.nativeElement, {
       geocoder:false, //Search in the upper right corner
       homeButton:false, //Upper right corner Home
@@ -30,8 +32,8 @@ export class CesiumDirective implements OnInit {
     const pizza = viewer.entities.add({
       position: Cesium.Cartesian3.fromDegrees(-81.655647, 30.332184),
       ellipse : {
-        semiMinorAxis : 2500.0,
-        semiMajorAxis : 4000.0,
+        semiMinorAxis : new Cesium.CallbackProperty(pizzaHeight, false),//2000.0,
+        semiMajorAxis : new Cesium.CallbackProperty(pizzaWidth, false),
         material : 'assets/dinnerpizza2.png'
       }
     });
@@ -40,21 +42,26 @@ export class CesiumDirective implements OnInit {
       destination: Cesium.Cartesian3.fromDegrees(-81.655647, 30.332184, 20000),
       duration: 0
     })
-    setTimeout(() =>
-      viewer.camera.flyTo({
-        destination: Cesium.Rectangle.fromDegrees(60.5284298033, 29.318572496, 75.1580277851, 38.4862816432),
-        maximumHeight: 10000000,
-        duration: 10
-      }), 10000);
+    // setTimeout(() =>
+    //   viewer.camera.flyTo({
+    //     destination: Cesium.Rectangle.fromDegrees(60.5284298033, 29.318572496, 75.1580277851, 38.4862816432),
+    //     maximumHeight: 10000000,
+    //     duration: 10
+    //   }), 10000);
     
-    let i = 0;
-    console.log(pizza)
-    while (i < 1000) {
-      pizza.ellipse.height += 100;//= Cesium.Cartesian3.fromDegrees(-81.655647-i*0.001, 30.332184-i*0.001) 
-      // pizza.ellipse.semiMinorAxis += 10000;
-      // pizza.ellipse.semiMajorAxis += 10000;
-      await new Promise(resolve => setTimeout(resolve, 10));
+    let height = 2000;
+    let width = 4000;
+    
+    function pizzaHeight() {
+      height *= 1.03;
+      return height;
     }
+    
+    function pizzaWidth() {
+      width *= 1.03;
+      return width;
+    }
+    console.log(pizza)
   }
 
 }
