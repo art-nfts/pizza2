@@ -1,5 +1,5 @@
-import * as _ from 'lodash';
 import { Directive, OnInit, ElementRef } from '@angular/core';
+import { DataService } from './data.service';
 declare var Cesium: any;
 
 const UPDATE_RATE = 30;
@@ -8,14 +8,10 @@ const UPDATE_RATE = 30;
   selector: '[appCesium]'
 })
 export class CesiumDirective implements OnInit {
-  
-  private btc: [string, number][] = [];
-  private startTime = 0;
 
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef, private data: DataService) {}
 
   async ngOnInit() {
-    this.btc = await this.getBtcData();
     
     Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzNTUzMzg1MS05YzYyLTRiZDAtYmJkMS1iOWFmNTU5YjllZTUiLCJpZCI6NTc0NTcsImlhdCI6MTYyMjM2ODIzNX0.oOvyENDh9CrhPGF0596pdXwlAMSA8n5F5JUlO0mYc54";
     
@@ -51,20 +47,42 @@ export class CesiumDirective implements OnInit {
     });
     
     viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(-81.655647, 30.332184, 20000),
+      //jacksonsville: -81.655647, 30.332184
+      destination: Cesium.Rectangle.fromDegrees(-81.658647, 30.320184, -81.653647, 30.324184),
+      //destination: Cesium.Rectangle.fromDegrees(-81.675647, 30.252184, -81.635647, 30.212184),
+      //destination: Cesium.Rectangle.fromDegrees(-81.855647, 30.132184, -81.455647, 30.532184),//Cesium.Cartesian3.fromDegrees(-81.655647, 30.332184, 20000),
       orientation: {
         heading: 0,
         pitch: 100,
         roll: 0
       },
       duration: 0
-    })
+    });
     // setTimeout(() =>
     //   viewer.camera.flyTo({
     //     destination: Cesium.Rectangle.fromDegrees(60.5284298033, 29.318572496, 75.1580277851, 38.4862816432),
     //     maximumHeight: 10000000,
     //     duration: 10
     //   }), 10000);
+    setTimeout(() =>
+    viewer.camera.flyToBoundingSphere(Cesium.BoundingSphere.fromPoints([
+        Cesium.Cartesian3.fromDegrees(-81.675647, 30.312184), Cesium.Cartesian3.fromDegrees(-81.635647, 30.352184)]), {
+      duration: 10
+    }), 15000);
+    
+    //florida: -87.6347, 24.514909, -80.032576, 31.000809
+    //us: -171.791110603, 18.91619, -66.96466, 71.3577635769
+    setTimeout(() =>
+    viewer.camera.flyToBoundingSphere(Cesium.BoundingSphere.fromPoints([
+        Cesium.Cartesian3.fromDegrees(-87.6347, 24.514909), Cesium.Cartesian3.fromDegrees(-80.032576, 31.000809)]), {
+      duration: 10
+    }), 30000);
+    
+    setTimeout(() =>
+    viewer.camera.flyToBoundingSphere(Cesium.BoundingSphere.fromPoints([
+        Cesium.Cartesian3.fromDegrees(-124.799782, 47.896994), Cesium.Cartesian3.fromDegrees(-79.272440, 25.595688)]), {
+      duration: 10
+    }), 45000);
   }
   
   private pizzaHeight() {
@@ -80,30 +98,11 @@ export class CesiumDirective implements OnInit {
   }
   
   private pizzaSizeRatio() {
-    const price = this.currentBtcValue();
+    const price = this.data.currentBtcValue();
     const pizzaValue = 10000*price;
     //const sizeRatio = pizzaValue/41*1.5/this.bgRefSize;//2*75cm pizza
     //const pizzaSize = 0.41*pizzaValue;
     return price / (41/10000)
-  }
-  
-  private currentBtcValue() {
-    if (!this.startTime) this.startTime = new Date().getTime();
-    const currentDiff = new Date().getTime() - this.startTime;
-    const index = Math.round(currentDiff/10);
-    return index < this.btc.length ? this.btc[index][1]
-      : this.btc[this.btc.length-1][1];
-  }
-  
-  private async getBtcData() {
-    const API_KEY = 'DDy7uCcyEjyzzqisk9A5';
-    const API_URL = 'https://www.quandl.com/api/v3/datasets/BCHAIN/MKPRU.json?api_key='+API_KEY;
-    const data = (await (await fetch(API_URL)).json()).dataset.data;
-    //add linear beginning
-    for (let i of _.range(4035, 3941)) {
-      data[i][1] = (41/10000)+((4035-i)/(4034-3941)*(0.0688-(41/10000)))
-    }
-    return _.reverse(data);
   }
 
 }

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { CesiumDirective } from './cesium.directive';
+import { DataService } from './data.service';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,7 @@ import { CesiumDirective } from './cesium.directive';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
