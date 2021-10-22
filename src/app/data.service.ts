@@ -4,35 +4,53 @@ import * as _ from 'lodash';
 @Injectable()
 export class DataService {
 
-  private loaded = false;
-  private btc: [string, number][] = [];
   private startDate = '2010-05-22';
+  private daysPerSecond = 50;
+
+  private loaded = this.loadBtcData();
+  private btcData: [string, number][] = [];
+  private paused = true;
   private startTime = 0;
-  private speed = 1;
+  private startIndex = 0;
+  
   public currentDate: string = this.formatDate('2010-05-22');
   private btcValue: number = 41/10000;
   public pizzaValue: number = 41;
 
   constructor() {
-    this.init();
+    this.reset();
   }
   
-  private async init() {
-    this.btc = await this.getBtcData();
-    this.loaded = true;
+  async start() {
+    await this.loaded;
+    this.paused = false;
+    this.startTime = new Date().getTime();
+  }
+  
+  pause() {
+    this.paused = true;
+    this.startIndex = this.currentIndex();
+  }
+  
+  async reset() {
+    await this.loaded;
+    this.startIndex = this.btcData.findIndex(d => d[0] == this.startDate);
   }
   
   currentBtcValue() {
-    //if (!this.loaded) return this.btcValue;
-    if (!this.startTime) this.startTime = new Date().getTime() + 10000;
-    const currentDiff = new Date().getTime() - this.startTime;
-    if (currentDiff > 0) {
-      const index = Math.min(_.round(currentDiff/(20/this.speed)), this.btc.length-1);
-      this.currentDate = this.formatDate(this.btc[index][0]);
-      this.btcValue = this.btc[index][1];
+    if (!this.paused) {
+      const index = this.currentIndex();
+      this.currentDate = this.formatDate(this.btcData[index][0]);
+      this.btcValue = this.btcData[index][1];
       this.pizzaValue = _.round(10000*this.btcValue);
     }
     return this.btcValue;
+  }
+  
+  private currentIndex() {
+    const timeDiff = (new Date().getTime() - this.startTime) / 1000;
+    const indexDiff = _.round(this.daysPerSecond*timeDiff);
+    return Math.min(this.startIndex + indexDiff, this.btcData.length-1);
   }
   
   private formatDate(date: string) {
@@ -40,19 +58,17 @@ export class DataService {
       { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });*/
   }
   
-  private async getBtcData() {
+  private async loadBtcData() {
     const API_KEY = 'DDy7uCcyEjyzzqisk9A5';
     const API_URL = 'https://www.quandl.com/api/v3/datasets/BCHAIN/MKPRU.json?api_key='+API_KEY;
-    let data: [string, number][]
-      = (await (await fetch(API_URL)).json()).dataset.data;
-    data = _.reverse(data);
-    const startIndex = data.findIndex(d => d[0] == this.startDate);
-    data = data.slice(startIndex);
-    const firstNonZero = data.findIndex(d => d[1] != 0);
-    for (let i of _.range(0, firstNonZero)) {
-      data[i][1] = (41/10000)+(i/firstNonZero*(data[firstNonZero][1]-(41/10000)));
+    this.btcData = (await (await fetch(API_URL)).json()).dataset.data;
+    this.btcData = _.reverse(this.btcData);
+    const lazloDayIndex = this.btcData.findIndex(d => d[0] == '2010-05-22');
+    const firstNonZero = this.btcData.findIndex(d => d[1] != 0);
+    for (let i of _.range(lazloDayIndex, firstNonZero)) {
+      this.btcData[i][1] = (41/10000)
+        +(i/firstNonZero*(this.btcData[firstNonZero][1]-(41/10000)));
     }
-    return data;
   }
 
 }

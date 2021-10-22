@@ -13,7 +13,7 @@ import { DataService } from './data.service';
   imports: [
     BrowserModule
   ],
-  providers: [DataService],
+  providers: [DataService, CesiumDirective],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

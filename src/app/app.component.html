@@ -1,5 +1,6 @@
-<div class="container">
-  <div id="cesiumContainer" appCesium></div>
+<div class="container" style="opacity: 1; background-color: black;">
+  <div id="cesiumContainer" appCesium [ngStyle]="{'opacity': opacity}"></div>
+  <div class="centered">{{story}}</div>
   <div class="bottom-left">{{data.currentDate}}</div>
   <div class="bottom-right">${{data.pizzaValue}}</div>
 </div>
