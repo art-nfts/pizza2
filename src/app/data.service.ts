@@ -64,10 +64,11 @@ export class DataService {
     this.btcData = (await (await fetch(API_URL)).json()).dataset.data;
     this.btcData = _.reverse(this.btcData);
     const lazloDayIndex = this.btcData.findIndex(d => d[0] == '2010-05-22');
-    const firstNonZero = this.btcData.findIndex(d => d[1] != 0);
-    for (let i of _.range(lazloDayIndex, firstNonZero)) {
-      this.btcData[i][1] = (41/10000)
-        +(i/firstNonZero*(this.btcData[firstNonZero][1]-(41/10000)));
+    const lastZero = _.findLastIndex(this.btcData, d => d[1] == 0);
+    const firstValue = this.btcData[lastZero+1][1];
+    const increment = (firstValue-(41/10000)) / (lastZero+1-lazloDayIndex);
+    for (let i of _.range(lazloDayIndex, lastZero+1)) {
+      this.btcData[i][1] = (41/10000)+((i-lazloDayIndex)*increment);
     }
   }
 

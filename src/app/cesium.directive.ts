@@ -35,12 +35,12 @@ export class CesiumDirective implements OnInit {
     console.log(countries.entities.values)
     this.viewer.dataSources.add(countries);
     const pizza = this.viewer.entities.add({
-      position: Cesium.Cartesian3.fromDegrees(-81.655647, 30.332184),
+      position: Cesium.Cartesian3.fromDegrees(-81.655647, 30.342184),
       ellipse : {
-        semiMinorAxis : new Cesium.CallbackProperty(this.pizzaHeight.bind(this), false),//2000.0,
-        semiMajorAxis : new Cesium.CallbackProperty(this.pizzaWidth.bind(this), false),
+        semiMinorAxis : new Cesium.CallbackProperty(this.pizzaRadius.bind(this), false),//2000.0,
+        semiMajorAxis : new Cesium.CallbackProperty(this.pizzaRadius.bind(this), false),
         height: 0,
-        extrudedHeight: new Cesium.CallbackProperty(this.pizzaThickness.bind(this), false),
+        extrudedHeight: 0,//new Cesium.CallbackProperty(this.pizzaThickness.bind(this), false),
         material : new Cesium.ImageMaterialProperty({
           image : 'assets/pizza.png',
           transparent: true
@@ -57,12 +57,12 @@ export class CesiumDirective implements OnInit {
     });
   }
   
-  private pizzaHeight() {
-    return 0.41 * this.pizzaSizeRatio();
+  private pizzaRadius() {
+    return this.doublePizzaRadius() / 2;
   }
   
-  private pizzaWidth() {
-    return 0.42 * this.pizzaSizeRatio();
+  private doublePizzaRadius() {
+    return 0.4064 * this.pizzaSizeRatio();
   }
   
   private pizzaThickness() {
@@ -74,7 +74,7 @@ export class CesiumDirective implements OnInit {
     const pizzaValue = 10000*price;
     //const sizeRatio = pizzaValue/41*1.5/this.bgRefSize;//2*75cm pizza
     //const pizzaSize = 0.41*pizzaValue;
-    return price / (41/10000)
+    return pizzaValue / 41;
   }
 
 }

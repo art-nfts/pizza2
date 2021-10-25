@@ -21,7 +21,8 @@ export class AppComponent implements OnInit {
   private async startStory() {
     await this.timeout(1);
     //jville hood: -81.658647, 30.320184, -81.653647, 30.324184
-    this.cesium.flyTo([-81.658647, 30.330184, -81.653647, 30.334184], 0);
+    //this.cesium.flyTo([-81.658647, 30.330184, -81.653647, 30.334184], 0);
+    this.cesium.flyTo([-81.656647, 30.341184, -81.654647, 30.343184], 0);
     await this.displayText(`On May 22, 2010, Programmer Lazlo Hanyecz bought two Papa John's Pizzas in
       Jacksonsville, FL for 10,000 BTC which was worth around $41.`, 5);
     await this.displayText(`This NFT shows how large a pizza Lazlo could have bought with
@@ -32,7 +33,7 @@ export class AppComponent implements OnInit {
     this.cesium.flyTo([-81.655647, 30.322184, -81.615647, 30.342184], 6);
     await this.timeout(6);
     this.data.pause();
-    await this.displayText(`One year later the pizzas would have been larger than Lazlo's neighborhood.`, 5);
+    await this.displayText(`A year later the pizzas would have been larger than Lazlo's neighborhood.`, 5);
     this.data.start();
     //jville county: -82.01, 30.1, -81.33, 30.5
     this.cesium.flyTo([-82.01, 30.1, -81.33, 30.5], 10);
