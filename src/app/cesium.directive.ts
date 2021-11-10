@@ -58,11 +58,13 @@ export class CesiumDirective implements OnInit {
   }
   
   private pizzaRadius() {
-    return this.doublePizzaRadius() / 2;
+    //console.log(this.pizzaSizeRatio(), Math.sqrt(this.pizzaArea() / Math.PI))
+    return Math.sqrt(this.pizzaArea() / Math.PI) * 2;
   }
   
-  private doublePizzaRadius() {
-    return 0.4064 * this.pizzaSizeRatio();
+  private pizzaArea() {
+    //console.log(this.pizzaSizeRatio(), Math.PI * Math.pow(0.4064/2, 2) * this.pizzaSizeRatio())
+    return Math.PI * Math.pow(0.4064/2, 2) * this.pizzaSizeRatio();//16 inch
   }
   
   private pizzaThickness() {
