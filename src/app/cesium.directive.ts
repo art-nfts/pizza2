@@ -58,12 +58,11 @@ export class CesiumDirective implements OnInit {
   }
   
   private pizzaRadius() {
-    //console.log(this.pizzaSizeRatio(), Math.sqrt(this.pizzaArea() / Math.PI))
-    return Math.sqrt(this.pizzaArea() / Math.PI) * 2;
+    return 0.4064 * this.pizzaSizeRatio() / 2;
+    //return Math.sqrt(this.pizzaArea() / Math.PI) * 2;
   }
   
   private pizzaArea() {
-    //console.log(this.pizzaSizeRatio(), Math.PI * Math.pow(0.4064/2, 2) * this.pizzaSizeRatio())
     return Math.PI * Math.pow(0.4064/2, 2) * this.pizzaSizeRatio();//16 inch
   }
   
@@ -73,10 +72,8 @@ export class CesiumDirective implements OnInit {
   
   private pizzaSizeRatio() {
     const price = this.data.currentBtcValue();
-    const pizzaValue = 10000*price;
-    //const sizeRatio = pizzaValue/41*1.5/this.bgRefSize;//2*75cm pizza
-    //const pizzaSize = 0.41*pizzaValue;
-    return pizzaValue / 41;
+    const currentPizzaValue = 10000*price;
+    return currentPizzaValue / 41;
   }
 
 }

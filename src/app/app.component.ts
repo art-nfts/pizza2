@@ -18,9 +18,19 @@ export class AppComponent implements OnInit {
   
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      console.log(params)
+      if ('date' in params) {
+        let date = params['date'];
+        date = date.slice(0,4) + '-' + date.slice(4,6) + '-' + date.slice(6);
+        this.setDate(date);
+      } else {
+        this.startStory();
+      }
     });
-    this.startStory();
+  }
+  
+  private async setDate(dateString: string) {
+    console.log(dateString)
+    this.data.setDate(dateString);
   }
   
   private async startStory() {
@@ -37,29 +47,29 @@ export class AppComponent implements OnInit {
     //jville: -81.655647, 30.322184, -81.615647, 30.342184
     this.cesium.flyTo([-81.655647, 30.322184, -81.615647, 30.342184], 6);
     await this.timeout(6);
-    // this.data.pause();
-    // await this.displayText(`A year later the pizzas would have been larger than Lazlo's neighborhood.`, 5);
-    // this.data.start();
-    // //jville county: -82.01, 30.1, -81.33, 30.5
-    // this.cesium.flyTo([-82.01, 30.1, -81.33, 30.5], 10);
-    // await this.timeout(14);
-    // this.data.pause();
-    // await this.displayText(`Three years later the pizzas would have been larger than Lazlo's city.`, 5);
-    // this.data.start();
-    // //florida: -87.6347, 24.514909, -80.032576, 31.000809
-    // this.cesium.flyTo([-87.6347, 24.514909, -80.032576, 31.000809], 9);
-    // await this.timeout(32);
-    // this.data.pause();
-    // await this.displayText(`Seven years later the pizzas would have been larger than the state of Florida.`, 5);
-    // this.data.start();
-    // //us: -171.791110603, 18.91619, -66.96466, 71.3577635769 (including hawaii/alaska)
-    // this.cesium.flyTo([-124.799782, 47.896994, -79.272440, 25.595688], 8);
-    // await this.timeout(22.5);
-    // this.data.pause();
-    // await this.displayText(`In late 2020 the pizzas would have reached a size larger than the United States.`, 5);
-    // this.data.start();
-    // //world
-    // this.cesium.flyTo([-124.799782, 80, -79.272440, -20], 5);
+    this.data.pause();
+    await this.displayText(`A year later the pizzas would have been larger than Lazlo's neighborhood.`, 5);
+    this.data.start();
+    //jville county: -82.01, 30.1, -81.33, 30.5
+    this.cesium.flyTo([-82.01, 30.1, -81.33, 30.5], 10);
+    await this.timeout(14);
+    this.data.pause();
+    await this.displayText(`Three years later the pizzas would have been larger than Lazlo's city.`, 5);
+    this.data.start();
+    //florida: -87.6347, 24.514909, -80.032576, 31.000809
+    this.cesium.flyTo([-87.6347, 24.514909, -80.032576, 31.000809], 9);
+    await this.timeout(32);
+    this.data.pause();
+    await this.displayText(`Seven years later the pizzas would have been larger than the state of Florida.`, 5);
+    this.data.start();
+    //us: -171.791110603, 18.91619, -66.96466, 71.3577635769 (including hawaii/alaska)
+    this.cesium.flyTo([-124.799782, 47.896994, -79.272440, 25.595688], 8);
+    await this.timeout(22.5);
+    this.data.pause();
+    await this.displayText(`In late 2020 the pizzas would have reached a size larger than the United States.`, 5);
+    this.data.start();
+    //world
+    this.cesium.flyTo([-124.799782, 80, -79.272440, -20], 5);
   }
   
   private async displayText(text: string, duration: number) {

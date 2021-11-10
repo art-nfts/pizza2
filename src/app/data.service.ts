@@ -13,7 +13,7 @@ export class DataService {
   private startTime = 0;
   private startIndex = 0;
   
-  public currentDate: string = this.formatDate('2010-05-22');
+  public currentDate: string = this.formatDate(this.startDate);
   private btcValue: number = 41/10000;
   public pizzaValue: number = 41;
 
@@ -32,24 +32,39 @@ export class DataService {
     this.startIndex = this.currentIndex();
   }
   
-  async reset() {
+  reset() {
+    this.setDate(this.startDate);
+  }
+  
+  async setDate(dateString: string) {
+    console.log(dateString);
     await this.loaded;
-    this.startIndex = this.btcData.findIndex(d => d[0] == this.startDate);
+    this.startIndex = this.btcData.findIndex(d => d[0] == dateString);
+    this.update();
   }
   
   currentBtcValue() {
-    if (!this.paused) {
-      const index = this.currentIndex();
-      this.currentDate = this.formatDate(this.btcData[index][0]);
-      this.btcValue = this.btcData[index][1];
-      this.pizzaValue = _.round(10000*this.btcValue);
-    }
+    if (!this.paused) this.update();
+    console.log(this.paused, this.btcValue)
     return this.btcValue;
   }
   
+  private update() {
+    const index = this.currentIndex();
+    this.currentDate = this.formatDate(this.btcData[index][0]);
+    this.btcValue = this.btcData[index][1];
+    this.pizzaValue = _.round(10000*this.btcValue);
+    console.log(this.btcValue)
+  }
+  
   private currentIndex() {
-    const timeDiff = (new Date().getTime() - this.startTime) / 1000;
-    const indexDiff = _.round(this.daysPerSecond*timeDiff);
+    let indexDiff;
+    if (this.startTime == 0) {
+      indexDiff = 0;
+    } else {
+      const timeDiff = (new Date().getTime() - this.startTime) / 1000;
+      indexDiff = _.round(this.daysPerSecond*timeDiff);
+    }
     return Math.min(this.startIndex + indexDiff, this.btcData.length-1);
   }
   
