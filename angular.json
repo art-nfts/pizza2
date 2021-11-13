@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pizza-nfts-ng": {
+    "pizza2": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/pizza-nfts-ng",
+            "outputPath": "dist/pizza2",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -78,10 +78,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "pizza-nfts-ng:build:production"
+              "browserTarget": "pizza2:build:production"
             },
             "development": {
-              "browserTarget": "pizza-nfts-ng:build:development"
+              "browserTarget": "pizza2:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -89,7 +89,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pizza-nfts-ng:build"
+            "browserTarget": "pizza2:build"
           }
         },
         "test": {
@@ -113,5 +113,5 @@
       }
     }
   },
-  "defaultProject": "pizza-nfts-ng"
+  "defaultProject": "pizza2"
 }

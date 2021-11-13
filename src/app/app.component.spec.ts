@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'pizza-nfts-ng'`, () => {
+  it(`should have as title 'pizza2'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('pizza-nfts-ng');
+    expect(app.title).toEqual('pizza2');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('pizza-nfts-ng app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('pizza2 app is running!');
   });
 });

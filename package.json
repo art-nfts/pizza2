@@ -1,10 +1,10 @@
 {
-  "name": "pizza-nfts-ng",
+  "name": "pizza2",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href https://florianthalmann.github.io/pizza-nfts/",
+    "build": "ng build --base-href https://art-nfts.github.io/pizza2/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
